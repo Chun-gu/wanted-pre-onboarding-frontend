@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 
 export default function Signin() {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState();
+  const [isPasswordValid, setIsPasswordValid] = useState();
 
   function handleEmailInput({ target: { value } }) {
     const emailPattern = /@/;
@@ -11,6 +13,13 @@ export default function Signin() {
 
     setEmail(value);
     setIsEmailValid(isEmailValid);
+  }
+
+  function handlePasswordInput({ target: { value } }) {
+    const isPasswordValid = value.length >= 8;
+
+    setPassword(value);
+    setIsPasswordValid(isPasswordValid);
   }
 
   return (
@@ -28,8 +37,16 @@ export default function Signin() {
         {isEmailValid === false && <span>이메일 형식을 확인해주세요.</span>}
 
         <label htmlFor="password">비밀번호</label>
-        <input type="text" name="" id="password" />
-        <span></span>
+        <input
+          id="password"
+          type="text"
+          value={password}
+          onChange={handlePasswordInput}
+          data-testid="password-input"
+        />
+        {isPasswordValid === false && (
+          <span>비밀번호는 8자 이상이어야 합니다.</span>
+        )}
         <button>로그인</button>
       </form>
       <Link to={'/signup'}>회원가입</Link>
