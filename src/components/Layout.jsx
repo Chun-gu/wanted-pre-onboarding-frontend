@@ -9,7 +9,7 @@ export default function Layout() {
         <nav>
           <ul>
             {pages.map((page) => (
-              <li>
+              <li key={page}>
                 <NavLink
                   to={page}
                   className={({ isActive }) => isActive && 'current-path'}
