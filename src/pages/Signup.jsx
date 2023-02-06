@@ -7,6 +7,8 @@ export default function Signup() {
   const [isEmailValid, setIsEmailValid] = useState();
   const [isPasswordValid, setIsPasswordValid] = useState();
 
+  const canSubmit = isEmailValid && isPasswordValid;
+
   function handleEmailInput({ target: { value } }) {
     const emailPattern = /@/;
     const isEmailValid = emailPattern.test(value);
@@ -48,7 +50,9 @@ export default function Signup() {
           <span>비밀번호는 8자 이상이어야 합니다.</span>
         )}
 
-        <button type="submit">회원가입</button>
+        <button type="submit" disabled={!canSubmit} data-testid="signup-button">
+          회원가입
+        </button>
       </form>
       <Link to={'/signin'}>로그인</Link>
     </>
