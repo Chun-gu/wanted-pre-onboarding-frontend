@@ -12,7 +12,9 @@ export default function Layout() {
               <li key={page}>
                 <NavLink
                   to={page}
-                  className={({ isActive }) => isActive && 'current-path'}
+                  className={({ isActive }) =>
+                    isActive ? 'current-path' : undefined
+                  }
                 >
                   {page}
                 </NavLink>
