@@ -35,7 +35,8 @@ export default function Signin() {
         email,
         password,
       })
-      .then(() => {
+      .then(({ data: { access_token } }) => {
+        localStorage.setItem('jwt', access_token);
         navigate('/todo');
       })
       .catch(
