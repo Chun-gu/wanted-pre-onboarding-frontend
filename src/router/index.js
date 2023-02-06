@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { Signup, Signin, Todo } from '../pages';
+import { Signup, Signin, Todo, ErrorPage } from '../pages';
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -12,6 +12,7 @@ export default function Router() {
         { path: 'signin', element: <Signin /> },
         { path: 'todo', element: <Todo /> },
       ],
+      errorElement: <ErrorPage />,
     },
   ]);
 
