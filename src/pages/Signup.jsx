@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -8,6 +9,8 @@ export default function Signup() {
   const [isPasswordValid, setIsPasswordValid] = useState();
 
   const canSubmit = isEmailValid && isPasswordValid;
+
+  const navigate = useNavigate();
 
   function handleEmailInput({ target: { value } }) {
     const emailPattern = /@/;
@@ -24,10 +27,33 @@ export default function Signup() {
     setIsPasswordValid(isPasswordValid);
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    axios
+      .post('https://pre-onboarding-selection-task.shop/auth/signup', {
+        email,
+        password,
+      })
+      .then(() => {
+        alert('가입되었습니다.');
+        navigate('/signin');
+      })
+      .catch(
+        ({
+          response: {
+            data: { statusCode, message },
+          },
+        }) => {
+          alert(`에러 상태: ${statusCode}\n에러 내용: ${message}`);
+        }
+      );
+  }
+
   return (
     <>
       <h1>회원가입</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="email">이메일</label>
         <input
           id="email"
