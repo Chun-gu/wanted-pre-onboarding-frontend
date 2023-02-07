@@ -1,28 +1,40 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 
 export default function TodoItem({ id, todo, isCompleted }) {
   const [isModifyMode, setIsModifyMode] = useState();
+  const modifiedTodoRef = useRef(null);
 
-  function handleTodoComplete() {
+  function updateTodo(todo, isCompleted) {
     const token = localStorage.getItem('jwt');
+
     axios.put(
       `https://pre-onboarding-selection-task.shop/todos/${id}`,
-      { todo, isCompleted: !isCompleted },
+      { todo, isCompleted },
       { headers: { Authorization: `Bearer ${token}` } }
     );
+  }
+
+  function handleTodoComplete() {
+    updateTodo(todo, !isCompleted);
   }
 
   function handleModifyMode() {
     setIsModifyMode((isModifyMode) => !isModifyMode);
   }
 
+  function handleTodoModify() {
+    const modifiedTodo = modifiedTodoRef?.current.value;
+
+    updateTodo(modifiedTodo, isCompleted);
+  }
+
   return (
     <li>
       {isModifyMode ? (
         <>
-          <input type="text" data-testid="modify-input" />
-          <button onClick={handleModifyMode} data-testid="submit-button">
+          <input type="text" ref={modifiedTodoRef} data-testid="modify-input" />
+          <button onClick={handleTodoModify} data-testid="submit-button">
             제출
           </button>
           <button onClick={handleModifyMode} data-testid="cancel-button">
