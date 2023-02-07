@@ -29,6 +29,14 @@ export default function TodoItem({ id, todo, isCompleted }) {
     updateTodo(modifiedTodo, isCompleted);
   }
 
+  function handleTodoDelete() {
+    const token = localStorage.getItem('jwt');
+
+    axios.delete(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
   return (
     <li>
       {isModifyMode ? (
@@ -54,7 +62,9 @@ export default function TodoItem({ id, todo, isCompleted }) {
           <button onClick={handleModifyMode} data-testid="modify-button">
             수정
           </button>
-          <button data-testid="delete-button">삭제</button>
+          <button data-testid="delete-button" onClick={handleTodoDelete}>
+            삭제
+          </button>
         </>
       )}
     </li>
