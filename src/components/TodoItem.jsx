@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function TodoItem({ id, todo, isCompleted }) {
   const [isModifyMode, setIsModifyMode] = useState();
 
-  function handleInput() {
+  function handleTodoComplete() {
     const token = localStorage.getItem('jwt');
     axios.put(
       `https://pre-onboarding-selection-task.shop/todos/${id}`,
@@ -35,7 +35,7 @@ export default function TodoItem({ id, todo, isCompleted }) {
             <input
               type="checkbox"
               defaultChecked={isCompleted}
-              onChange={handleInput}
+              onChange={handleTodoComplete}
             />
             <span>{todo}</span>
           </label>
