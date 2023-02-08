@@ -18,8 +18,8 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response.data,
-  (error) => error.response.data
+  (response) => ({ data: response.data }),
+  (error) => ({ error: error.response.data })
 );
 
 export default api;
