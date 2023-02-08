@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
-import { createTodo, getTodos } from '../apis';
+import { createTodo } from '../apis';
 import { TodoList } from '../components';
+import { TODO_ACTION } from '../constants';
+import { useTodo } from '../hooks';
 
 export default function TodoPage() {
-  const [todos, setTodos] = useState([]);
+  const [, dispatch] = useTodo();
   const todoInputRef = useRef(null);
 
   async function handleSubmit(e) {
@@ -17,21 +19,12 @@ export default function TodoPage() {
     const { data, error } = await createTodo(todo);
 
     if (data) {
+      dispatch({ type: TODO_ACTION.create, newTodo: data });
       todoInputRef.current.value = '';
-      setTodos((prev) => [...prev, data]);
     } else if (error) {
       alert(error.message);
     }
   }
-
-  useEffect(() => {
-    (async () => {
-      const { data, error } = await getTodos();
-
-      if (data) setTodos(data);
-      else if (error) alert(error.message);
-    })();
-  }, []);
 
   return (
     <>
@@ -48,7 +41,7 @@ export default function TodoPage() {
           추가
         </button>
       </form>
-      <TodoList todos={todos} />
+      <TodoList />
     </>
   );
 }
