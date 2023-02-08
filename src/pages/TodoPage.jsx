@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { createTodo, getTodos } from '../apis';
-import { TodoItem } from '../components';
+import { TodoList } from '../components';
 
 export default function TodoPage() {
   const [todos, setTodos] = useState([]);
@@ -48,11 +48,7 @@ export default function TodoPage() {
           추가
         </button>
       </form>
-      <ul>
-        {todos?.map((todo) => (
-          <TodoItem key={todo.id} {...todo} />
-        ))}
-      </ul>
+      <TodoList todos={todos} />
     </>
   );
 }
