@@ -1,40 +1,36 @@
 import { useRef, useState } from 'react';
-import axios from 'axios';
+
+import { updateTodo, deleteTodo } from '../apis';
 
 export default function TodoItem({ id, todo, isCompleted }) {
   const [isModifyMode, setIsModifyMode] = useState();
   const modifiedTodoRef = useRef(null);
 
-  function updateTodo(todo, isCompleted) {
-    const token = localStorage.getItem('jwt');
+  async function handleTodoComplete() {
+    const { error } = await updateTodo(id, todo, !isCompleted);
 
-    axios.put(
-      `https://pre-onboarding-selection-task.shop/todos/${id}`,
-      { todo, isCompleted },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-  }
-
-  function handleTodoComplete() {
-    updateTodo(todo, !isCompleted);
+    if (error) alert(error.message);
   }
 
   function handleModifyMode() {
     setIsModifyMode((isModifyMode) => !isModifyMode);
   }
 
-  function handleTodoModify() {
-    const modifiedTodo = modifiedTodoRef?.current.value;
+  async function handleTodoModify() {
+    const modifiedTodo = modifiedTodoRef.current.value;
 
-    updateTodo(modifiedTodo, isCompleted);
+    if (!modifiedTodo) return;
+
+    const { data, error } = await updateTodo(id, modifiedTodo, isCompleted);
+
+    if (data) setIsModifyMode(false);
+    else if (error) alert(error.message);
   }
 
-  function handleTodoDelete() {
-    const token = localStorage.getItem('jwt');
+  async function handleTodoDelete() {
+    const { error } = await deleteTodo(id);
 
-    axios.delete(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    if (error) alert(error.message);
   }
 
   return (

@@ -1,42 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+
+import { createTodo, getTodos } from '../apis';
 import { TodoItem } from '../components';
 
 export default function Todo() {
-  const [todos, setTodos] = useState();
+  const [todos, setTodos] = useState([]);
   const todoInputRef = useRef(null);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const todo = todoInputRef.current.value;
+
     if (!todo) return;
 
-    const token = localStorage.getItem('jwt');
-    axios
-      .post(
-        'https://pre-onboarding-selection-task.shop/todos',
-        { todo },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then(({ data }) => {
-        todoInputRef.current.value = '';
-        setTodos((prev) => [...prev, data]);
-      });
+    const { data, error } = await createTodo(todo);
+
+    if (data) {
+      todoInputRef.current.value = '';
+      setTodos((prev) => [...prev, data]);
+    } else if (error) {
+      alert(error.message);
+    }
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    async function getTodos() {
-      axios
-        .get('https://pre-onboarding-selection-task.shop/todos', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => setTodos(response.data));
-    }
-    getTodos();
+    (async () => {
+      const { data, error } = await getTodos();
+
+      if (data) setTodos(data);
+      else if (error) alert(error.message);
+    })();
   }, []);
 
   return (

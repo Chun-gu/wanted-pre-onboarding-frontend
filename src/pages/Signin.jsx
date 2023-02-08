@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { signIn } from '../apis';
 
 export default function Signin() {
   const [email, setEmail] = useState('');
@@ -27,27 +28,17 @@ export default function Signin() {
     setIsPasswordValid(isPasswordValid);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    axios
-      .post('https://pre-onboarding-selection-task.shop/auth/signin', {
-        email,
-        password,
-      })
-      .then(({ data: { access_token } }) => {
-        localStorage.setItem('jwt', access_token);
-        navigate('/todo');
-      })
-      .catch(
-        ({
-          response: {
-            data: { statusCode, message },
-          },
-        }) => {
-          alert(`에러 상태: ${statusCode}\n에러 내용: ${message}`);
-        }
-      );
+    const { data, error } = await signIn(email, password);
+
+    if (data) {
+      localStorage.setItem('access_token', data.access_token);
+      navigate('/todo');
+    } else if (error) {
+      alert(error.message);
+    }
   }
 
   return (

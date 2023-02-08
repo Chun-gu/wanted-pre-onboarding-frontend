@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { signUp } from '../apis';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -27,27 +27,16 @@ export default function Signup() {
     setIsPasswordValid(isPasswordValid);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    axios
-      .post('https://pre-onboarding-selection-task.shop/auth/signup', {
-        email,
-        password,
-      })
-      .then(() => {
-        alert('가입되었습니다.');
-        navigate('/signin');
-      })
-      .catch(
-        ({
-          response: {
-            data: { statusCode, message },
-          },
-        }) => {
-          alert(`에러 상태: ${statusCode}\n에러 내용: ${message}`);
-        }
-      );
+    const { data, error } = await signUp(email, password);
+    if (data) {
+      alert('가입되었습니다.');
+      navigate('/signin');
+    } else if (error) {
+      alert(error.message);
+    }
   }
 
   return (
