@@ -16,9 +16,9 @@ export default function TodoPage() {
 
     if (!todo) return;
 
-    const { data, error } = await createTodo(todo);
+    const { isSuccess, data, error } = await createTodo(todo);
 
-    if (data) {
+    if (isSuccess) {
       dispatch({ type: TODO_ACTION.create, newTodo: data });
       todoInputRef.current.value = '';
     } else if (error) {

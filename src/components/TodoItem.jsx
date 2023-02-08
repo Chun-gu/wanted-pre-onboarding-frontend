@@ -11,9 +11,9 @@ export default function TodoItem({ id, todo, isCompleted }) {
   const completeTodoRef = useRef(null);
 
   async function handleTodoComplete() {
-    const { data, error } = await updateTodo(id, todo, !isCompleted);
+    const { isSuccess, data, error } = await updateTodo(id, todo, !isCompleted);
 
-    if (data) {
+    if (isSuccess) {
       dispatch({ type: TODO_ACTION.update, newTodo: data });
     } else if (error) {
       alert(error.message);
@@ -30,18 +30,22 @@ export default function TodoItem({ id, todo, isCompleted }) {
 
     if (!modifiedTodo) return;
 
-    const { data, error } = await updateTodo(id, modifiedTodo, isCompleted);
+    const { isSuccess, data, error } = await updateTodo(
+      id,
+      modifiedTodo,
+      isCompleted
+    );
 
-    if (data) {
+    if (isSuccess) {
       setIsModifyMode(false);
       dispatch({ type: TODO_ACTION.update, newTodo: data });
     } else if (error) alert(error.message);
   }
 
   async function handleTodoDelete() {
-    const { data, error } = await deleteTodo(id);
+    const { isSuccess, error } = await deleteTodo(id);
 
-    if (data) dispatch({ type: TODO_ACTION.delete, newTodo: { id } });
+    if (isSuccess) dispatch({ type: TODO_ACTION.delete, newTodo: { id } });
     else if (error) alert(error.message);
   }
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { signUp } from '../apis';
 
 export default function SignUpPage() {
@@ -30,8 +31,8 @@ export default function SignUpPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const { data, error } = await signUp(email, password);
-    if (data) {
+    const { isSuccess, error } = await signUp(email, password);
+    if (isSuccess) {
       alert('가입되었습니다.');
       navigate('/signin');
     } else if (error) {

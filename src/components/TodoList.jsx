@@ -10,9 +10,9 @@ export default function TodoList() {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await getTodos();
+      const { isSuccess, data, error } = await getTodos();
 
-      if (data) {
+      if (isSuccess) {
         dispatch({ type: TODO_ACTION.init, newTodo: data });
       } else if (error) alert(error.message);
     })();

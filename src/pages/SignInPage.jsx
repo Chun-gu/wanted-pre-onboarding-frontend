@@ -31,9 +31,9 @@ export default function SignInPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const { data, error } = await signIn(email, password);
+    const { isSuccess, data, error } = await signIn(email, password);
 
-    if (data) {
+    if (isSuccess) {
       localStorage.setItem('access_token', data.access_token);
       navigate('/todo');
     } else if (error) {
