@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createTodo, getTodos } from '../apis';
 import { TodoItem } from '../components';
 
-export default function Todo() {
+export default function TodoPage() {
   const [todos, setTodos] = useState([]);
   const todoInputRef = useRef(null);
 

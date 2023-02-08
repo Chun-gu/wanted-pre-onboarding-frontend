@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { Signup, Signin, Todo, ErrorPage } from '../pages';
+import { SignUpPage, SignInPage, TodoPage, ErrorPage } from '../pages';
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -8,9 +8,9 @@ export default function Router() {
       path: '/',
       element: <Layout />,
       children: [
-        { path: 'signup', element: <Signup /> },
-        { path: 'signin', element: <Signin /> },
-        { path: 'todo', element: <Todo /> },
+        { path: 'signup', element: <SignUpPage /> },
+        { path: 'signin', element: <SignInPage /> },
+        { path: 'todo', element: <TodoPage /> },
       ],
       errorElement: <ErrorPage />,
     },

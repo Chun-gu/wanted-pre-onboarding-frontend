@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signUp } from '../apis';
 
-export default function Signup() {
+import { signIn } from '../apis';
+
+export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState();
@@ -30,10 +31,11 @@ export default function Signup() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const { data, error } = await signUp(email, password);
+    const { data, error } = await signIn(email, password);
+
     if (data) {
-      alert('가입되었습니다.');
-      navigate('/signin');
+      localStorage.setItem('access_token', data.access_token);
+      navigate('/todo');
     } else if (error) {
       alert(error.message);
     }
@@ -41,7 +43,7 @@ export default function Signup() {
 
   return (
     <>
-      <h1>회원가입</h1>
+      <h1>로그인</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">이메일</label>
         <input
@@ -64,12 +66,11 @@ export default function Signup() {
         {isPasswordValid === false && (
           <span>비밀번호는 8자 이상이어야 합니다.</span>
         )}
-
-        <button type="submit" disabled={!canSubmit} data-testid="signup-button">
-          회원가입
+        <button type="submit" disabled={!canSubmit} data-testid="signin-button">
+          로그인
         </button>
       </form>
-      <Link to={'/signin'}>로그인</Link>
+      <Link to={'/signup'}>회원가입</Link>
     </>
   );
 }
