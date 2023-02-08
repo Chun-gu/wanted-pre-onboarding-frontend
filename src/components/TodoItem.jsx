@@ -5,11 +5,15 @@ import { updateTodo, deleteTodo } from '../apis';
 export default function TodoItem({ id, todo, isCompleted }) {
   const [isModifyMode, setIsModifyMode] = useState();
   const modifiedTodoRef = useRef(null);
+  const completeTodoRef = useRef(null);
 
   async function handleTodoComplete() {
     const { error } = await updateTodo(id, todo, !isCompleted);
 
-    if (error) alert(error.message);
+    if (error) {
+      alert(error.message);
+      completeTodoRef.current.checked = isCompleted;
+    }
   }
 
   function handleModifyMode() {
@@ -50,6 +54,7 @@ export default function TodoItem({ id, todo, isCompleted }) {
           <label>
             <input
               type="checkbox"
+              ref={completeTodoRef}
               defaultChecked={isCompleted}
               onChange={handleTodoComplete}
             />
