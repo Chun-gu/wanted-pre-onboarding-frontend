@@ -1,16 +1,21 @@
 import { useRef, useState } from 'react';
 
 import { updateTodo, deleteTodo } from '../apis';
+import { TODO_ACTION } from '../constants';
+import { useTodo } from '../hooks';
 
 export default function TodoItem({ id, todo, isCompleted }) {
+  const [, dispatch] = useTodo();
   const [isModifyMode, setIsModifyMode] = useState();
   const modifiedTodoRef = useRef(null);
   const completeTodoRef = useRef(null);
 
   async function handleTodoComplete() {
-    const { error } = await updateTodo(id, todo, !isCompleted);
+    const { data, error } = await updateTodo(id, todo, !isCompleted);
 
-    if (error) {
+    if (data) {
+      dispatch({ type: TODO_ACTION.update, newTodo: data });
+    } else if (error) {
       alert(error.message);
       completeTodoRef.current.checked = isCompleted;
     }
@@ -27,14 +32,17 @@ export default function TodoItem({ id, todo, isCompleted }) {
 
     const { data, error } = await updateTodo(id, modifiedTodo, isCompleted);
 
-    if (data) setIsModifyMode(false);
-    else if (error) alert(error.message);
+    if (data) {
+      setIsModifyMode(false);
+      dispatch({ type: TODO_ACTION.update, newTodo: data });
+    } else if (error) alert(error.message);
   }
 
   async function handleTodoDelete() {
-    const { error } = await deleteTodo(id);
+    const { data, error } = await deleteTodo(id);
 
-    if (error) alert(error.message);
+    if (data) dispatch({ type: TODO_ACTION.delete, newTodo: { id } });
+    else if (error) alert(error.message);
   }
 
   return (
