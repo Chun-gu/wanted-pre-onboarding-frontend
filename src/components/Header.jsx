@@ -13,7 +13,6 @@ export function Header() {
 
   return (
     <header className="header">
-      {isSignIn && <div></div>}
       <nav>
         <ul>
           {pages.map((page) => (
