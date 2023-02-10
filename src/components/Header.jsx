@@ -1,10 +1,19 @@
 import { NavLink } from 'react-router-dom';
+import { AUTH_ACTION } from '../constants';
+import { useAuth } from '../hooks';
 
 export function Header() {
   const pages = ['signup', 'signin', 'todo'];
+  const [{ isSignIn }, dispatch] = useAuth();
+
+  function signOut() {
+    localStorage.removeItem('token');
+    dispatch({ type: AUTH_ACTION.signOut });
+  }
 
   return (
     <header className="header">
+      {isSignIn && <div></div>}
       <nav>
         <ul>
           {pages.map((page) => (
@@ -21,6 +30,11 @@ export function Header() {
           ))}
         </ul>
       </nav>
+      {isSignIn && (
+        <button type="button" onClick={signOut}>
+          signout
+        </button>
+      )}
     </header>
   );
 }
