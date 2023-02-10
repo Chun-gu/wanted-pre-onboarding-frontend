@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { signIn } from '../apis';
+import { AUTH_ACTION } from '../constants';
+import { useAuth } from '../hooks';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState();
   const [isPasswordValid, setIsPasswordValid] = useState();
+  const [, dispatch] = useAuth();
 
   const canSubmit = isEmailValid && isPasswordValid;
 
@@ -34,7 +37,8 @@ export default function SignInPage() {
     const { isSuccess, data, error } = await signIn(email, password);
 
     if (isSuccess) {
-      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('token', data.access_token);
+      dispatch({ type: AUTH_ACTION.signIn, token: data.access_token });
       navigate('/todo');
     } else if (error) {
       alert(error.message);
