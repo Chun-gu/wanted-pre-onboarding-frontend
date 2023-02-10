@@ -1,22 +1,45 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { SignUpPage, SignInPage, TodoPage, ErrorPage } from '../pages';
+
+import { ProtectedRoute } from '../components';
 import { TodoProvider } from '../contexts';
+import {
+  ErrorPage,
+  RootPage,
+  SignInPage,
+  SignUpPage,
+  TodoPage,
+} from '../pages';
 
 export default function Router() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Layout />,
+      element: <RootPage />,
       children: [
-        { path: 'signup', element: <SignUpPage /> },
-        { path: 'signin', element: <SignInPage /> },
+        {
+          path: 'signup',
+          element: (
+            <ProtectedRoute redirect={'/todo'} needSignIn={false}>
+              <SignUpPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: 'signin',
+          element: (
+            <ProtectedRoute redirect={'/todo'} needSignIn={false}>
+              <SignInPage />
+            </ProtectedRoute>
+          ),
+        },
         {
           path: 'todo',
           element: (
-            <TodoProvider>
-              <TodoPage />
-            </TodoProvider>
+            <ProtectedRoute redirect={'/signin'} needSignIn={true}>
+              <TodoProvider>
+                <TodoPage />
+              </TodoProvider>
+            </ProtectedRoute>
           ),
         },
       ],
