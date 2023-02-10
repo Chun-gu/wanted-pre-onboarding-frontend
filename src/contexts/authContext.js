@@ -5,9 +5,9 @@ import { authReducer } from '../reducers';
 export const AuthStateContext = createContext();
 export const AuthDispatchContext = createContext();
 
-const initialState = { isSignIn: false, token: '' };
-
 export function AuthProvider({ children }) {
+  const token = localStorage.getItem('token');
+  const initialState = { isSignIn: !!token, token };
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   return (
