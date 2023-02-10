@@ -1,47 +1,14 @@
-import { useRef } from 'react';
-
-import { createTodo } from '../apis';
-import { TodoList } from '../components';
-import { TODO_ACTION } from '../constants';
-import { useTodo } from '../hooks';
+import { TodoForm, TodoList } from '../components';
+import { TodoProvider } from '../contexts';
 
 export default function TodoPage() {
-  const [, dispatch] = useTodo();
-  const todoInputRef = useRef(null);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    const todo = todoInputRef.current.value;
-
-    if (!todo) return;
-
-    const { isSuccess, data, error } = await createTodo(todo);
-
-    if (isSuccess) {
-      dispatch({ type: TODO_ACTION.create, newTodo: data });
-      todoInputRef.current.value = '';
-    } else if (error) {
-      alert(error.message);
-    }
-  }
-
   return (
     <>
       <h1>할 일 목록</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="todo">할 일 작성</label>
-        <input
-          id="todo"
-          ref={todoInputRef}
-          type="text"
-          data-testid="new-todo-input"
-        />
-        <button type="submit" data-testid="new-todo-add-button">
-          추가
-        </button>
-      </form>
-      <TodoList />
+      <TodoProvider>
+        <TodoForm />
+        <TodoList />
+      </TodoProvider>
     </>
   );
 }

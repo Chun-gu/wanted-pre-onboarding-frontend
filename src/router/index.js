@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { ProtectedRoute } from '../components';
-import { TodoProvider } from '../contexts';
 import {
   ErrorPage,
   RootPage,
@@ -36,9 +35,7 @@ export default function Router() {
           path: 'todo',
           element: (
             <ProtectedRoute redirect={'/signin'} needSignIn={true}>
-              <TodoProvider>
-                <TodoPage />
-              </TodoProvider>
+              <TodoPage />
             </ProtectedRoute>
           ),
         },
