@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { signIn } from '../apis';
 import { AUTH_ACTION } from '../constants';
@@ -13,8 +13,6 @@ export default function SignInPage() {
   const [, dispatch] = useAuth();
 
   const canSubmit = isEmailValid && isPasswordValid;
-
-  const navigate = useNavigate();
 
   function handleEmailInput({ target: { value } }) {
     const emailPattern = /@/;
@@ -39,7 +37,6 @@ export default function SignInPage() {
     if (isSuccess) {
       localStorage.setItem('token', data.access_token);
       dispatch({ type: AUTH_ACTION.signIn, token: data.access_token });
-      navigate('/todo');
     } else if (error) {
       alert(error.message);
     }
