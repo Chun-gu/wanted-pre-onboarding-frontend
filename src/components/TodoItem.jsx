@@ -53,7 +53,12 @@ export default function TodoItem({ id, todo, isCompleted }) {
     <li>
       {isModifyMode ? (
         <>
-          <input type="text" ref={modifiedTodoRef} data-testid="modify-input" />
+          <input
+            ref={modifiedTodoRef}
+            type="text"
+            defaultValue={todo}
+            data-testid="modify-input"
+          />
           <button onClick={handleTodoModify} data-testid="submit-button">
             제출
           </button>
